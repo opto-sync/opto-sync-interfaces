@@ -1,0 +1,25 @@
+[package]
+org = "opto-sync"
+name = "opto-sync-interfaces"
+version = "0.1.0"
+description = "Transport-neutral Opto Sync protocol and lifecycle types"
+license = "MIT"
+
+[package.repository]
+vcs = "git"
+url = "https://github.com/opto-sync/opto-sync-interfaces"
+
+[targets.rust]
+dir = "."
+adapter = "rust"
+
+[targets.typescript]
+dir = "generated/typescript"
+adapter = "typescript"
+
+[targets.dart]
+dir = "generated/dart"
+adapter = "dart"
+
+[publish]
+enabled = false

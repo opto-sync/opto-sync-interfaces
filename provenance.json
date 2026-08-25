@@ -1,0 +1,34 @@
+{
+  "schema": "opto-sync.interfaces.provenance.v1",
+  "sourceRepository": "https://github.com/opto-sync/opto-sync-clients.git",
+  "sourceCommit": "1d22a98fbef4888e36ca1f78b72d469f74f61721",
+  "sourceTree": "9c61c311fb663da24af80d33b9f569d219ef9a8a",
+  "orderedSources": [
+    {
+      "path": "schema/opto-sync-envelope.schema.json",
+      "sha256": "0434fbc1d76dd34892b92f2916a0014db40b34d761e67fd9c49f8a3a9b1ffe2d",
+      "role": "byte-identical canonical ingest schema"
+    },
+    {
+      "path": "clients/rust/src/protocol.rs",
+      "sha256": "837f0f46026a45111a804f7e38c606e57974bde15ef143383662efbcbe437d0a",
+      "role": "protocol, checkpoint, queue, and snapshot declarations"
+    },
+    {
+      "path": "clients/rust/src/observability.rs",
+      "sha256": "0195a7866df43d4b24c87498db65879d6df7611b5ab7f0f97fbdef3b878c188e",
+      "role": "privacy-bounded observability declarations"
+    },
+    {
+      "path": "clients/ts/src/connectivity.ts",
+      "sha256": "edd2db05228216ab204c7f92db3686e07a2d831a29df5bb92ea345e316d1bf40",
+      "role": "connectivity state declarations"
+    }
+  ],
+  "compatibility": {
+    "major": "breaking field, enum, identifier, or wire-representation changes",
+    "minor": "backward-compatible optional declarations",
+    "patch": "documentation or provenance corrections that preserve contract bytes"
+  },
+  "publicationEnabled": false
+}

@@ -5,10 +5,23 @@ contracts for Opto Sync.
 
 ## Status
 
-Bootstrap repository. No package or registry publication is enabled yet. The
-first implementation pull request must import reviewed contracts from their
-current source, preserve provenance, and add deterministic compatibility tests
-before this repository becomes authoritative.
+Implemented contract source; registry publication remains deliberately
+disabled. `provenance.json` records the exact `opto-sync-clients` commit, tree,
+ordered source files, and SHA-256 digests used for the initial extraction. The
+canonical ingest schema is byte-identical to its reviewed source at commit
+`1d22a98fbef4888e36ca1f78b72d469f74f61721`.
+
+## Repository layout
+
+- `schemas/` contains stable-ID JSON Schema authorities.
+- `src/lib.rs` is the type-only Rust representation.
+- `generated/` contains type-only TypeScript, Dart, Kotlin, Swift, Java, and C
+  representations. These packages contain declarations, not transports,
+  persistence, validation engines, or merge bodies.
+- `fixtures/` carries deterministic positive and negative wire examples.
+- `scripts/verify_contracts.py` locks schema bytes, provenance, language
+  coverage, and the no-runtime-implementation boundary.
+- `tests/contract.rs` proves Rust wire names and fixture outcomes.
 
 ## Ownership boundary
 
@@ -46,14 +59,21 @@ Interfaces must never depend on a sync engine or client implementation.
 Generated packages must be reproducible from committed schemas, and consumers
 must pin an immutable interface revision or released package.
 
-## First implementation gates
+## Validation
 
-- Record source repository, commit, tree, and per-file digests for imported
-  contracts.
-- Define schema IDs, compatibility policy, and deterministic code generation.
-- Prove generated Dart, TypeScript, Rust, Kotlin, Swift, Java, and C-facing
-  representations accept and reject the same canonical fixtures.
-- Add negative tests for unknown versions, malformed envelopes, duplicate
-  identifiers, invalid causal metadata, and unsafe unbounded fields.
-- Keep publication disabled until clean-room consumers resolve an immutable
-  lock and pass cross-version compatibility tests.
+```sh
+python3 scripts/verify_contracts.py
+cargo fmt --all -- --check
+cargo test --all-targets --locked
+cargo clippy --all-targets --locked -- -D warnings
+tsc --noEmit --strict generated/typescript/index.ts
+dart analyze generated/dart/lib/opto_sync_interfaces.dart
+swiftc -typecheck generated/swift/Sources/OptoSyncInterfaces/Contracts.swift
+javac generated/java/src/main/java/dev/optosync/interfaces/Contracts.java
+clang -std=c17 -Wall -Wextra -Werror -fsyntax-only -x c \
+  generated/c/include/opto_sync_interfaces.h
+```
+
+Kotlin syntax is CI-validated with the pinned Kotlin compiler. Publication
+stays disabled until clean-room consumers resolve an immutable lock and pass
+cross-version compatibility tests.
