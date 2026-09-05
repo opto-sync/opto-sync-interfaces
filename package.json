@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "check:typespec": "tsp compile validation/typespec/validation.tsp --emit=@typespec/json-schema --option @typespec/json-schema.file-type=json --output-dir .tmp/typespec"
+    "check:typespec": "tsp compile validation/typespec/validation.tsp --emit=@typespec/json-schema --option @typespec/json-schema.file-type=json --option @typespec/json-schema.seal-object-schemas=true --output-dir .tmp/typespec"
   },
   "devDependencies": {
     "@typespec/compiler": "1.15.0",

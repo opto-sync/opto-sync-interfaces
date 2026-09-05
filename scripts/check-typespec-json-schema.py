@@ -78,7 +78,8 @@ def parse_schema(document: dict) -> dict[str, dict]:
             if "default" in field:
                 fields[field_name]["default"] = field["default"]
         models[name] = {
-            "closed": definition.get("additionalProperties") is False,
+            "closed": definition.get("additionalProperties") is False
+            or definition.get("unevaluatedProperties") == {"not": {}},
             "fields": fields,
         }
     return models
@@ -110,9 +111,21 @@ def compare(schema_models: dict[str, dict], typespec_models: dict[str, dict]) ->
 def main() -> None:
     schema = json.loads(SCHEMA_PATH.read_text(encoding="utf-8"))
     typespec = TYPESPEC_PATH.read_text(encoding="utf-8")
-    compare(parse_schema(schema), parse_typespec(typespec))
+    schema_models = parse_schema(schema)
+    typespec_models = parse_typespec(typespec)
+    compare(schema_models, typespec_models)
+    generated_dir = ROOT / ".tmp/typespec/@typespec/json-schema"
+    if generated_dir.is_dir():
+        generated_models = {}
+        for model_name in typespec_models:
+            generated_path = generated_dir / f"{model_name}.json"
+            if not generated_path.is_file():
+                raise SystemExit(f"TypeSpec emitter did not produce {generated_path}")
+            generated = json.loads(generated_path.read_text(encoding="utf-8"))
+            generated_models.update(parse_schema({"$defs": {model_name: generated}}))
+        compare(schema_models, generated_models)
     print(
-        f"TypeSpec and JSON Schema agree on {len(parse_schema(schema))} public validation models"
+        f"TypeSpec and JSON Schema agree on {len(schema_models)} public validation models"
     )
 
 
