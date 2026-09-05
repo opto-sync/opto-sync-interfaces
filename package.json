@@ -1,0 +1,12 @@
+{
+  "name": "@opto-sync/interfaces-contract-check",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check:typespec": "tsp compile validation/typespec/validation.tsp --emit=@typespec/json-schema --option @typespec/json-schema.file-type=json --output-dir .tmp/typespec"
+  },
+  "devDependencies": {
+    "@typespec/compiler": "1.15.0",
+    "@typespec/json-schema": "1.15.0"
+  }
+}
