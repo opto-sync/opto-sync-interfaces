@@ -2,10 +2,10 @@ name: validation-contract
 
 on:
   pull_request:
-    paths: ["validation/**", "scripts/check-validation-contract.py", ".github/workflows/validation-contract.yml"]
+    paths: ["validation/**", "scripts/check-validation-contract.py", "scripts/check-typespec-json-schema.py", "tests/test_typespec_json_schema.py", ".github/workflows/validation-contract.yml"]
   push:
     branches: [main]
-    paths: ["validation/**", "scripts/check-validation-contract.py", ".github/workflows/validation-contract.yml"]
+    paths: ["validation/**", "scripts/check-validation-contract.py", "scripts/check-typespec-json-schema.py", "tests/test_typespec_json_schema.py", ".github/workflows/validation-contract.yml"]
 
 permissions:
   contents: read
@@ -16,5 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
       - run: python3 scripts/check-validation-contract.py
+      - run: python3 scripts/check-typespec-json-schema.py
+      - run: python3 -m unittest -v tests.test_typespec_json_schema
       - run: python3 -m json.tool validation/public-contracts.v1.json >/dev/null
       - run: python3 -m json.tool validation/route-bindings.v1.json >/dev/null

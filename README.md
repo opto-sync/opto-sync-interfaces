@@ -21,6 +21,9 @@ canonical ingest schema is byte-identical to its reviewed source at commit
 - `fixtures/` carries deterministic positive and negative wire examples.
 - `scripts/verify_contracts.py` locks schema bytes, provenance, language
   coverage, and the no-runtime-implementation boundary.
+- `scripts/check-typespec-json-schema.py` compares the independently reviewed
+  TypeSpec and JSON Schema authorities semantically before generated outputs
+  are accepted.
 - `tests/contract.rs` proves Rust wire names and fixture outcomes.
 
 ## Ownership boundary
