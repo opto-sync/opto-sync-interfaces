@@ -1,3 +1,6 @@
+import "@typespec/json-schema";
+
+@TypeSpec.JsonSchema.jsonSchema("https://github.com/opto-sync/opto-sync-interfaces/validation/")
 namespace OptoSync.Validation;
 
 model RequestMeta {

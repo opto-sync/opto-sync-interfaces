@@ -1,6 +1,6 @@
 # Public validation contracts
 
-Only client-safe contracts belong here. `RequestMeta`, `PageQuery`, and `ProblemDetails` are independently authored in JSON Schema and TypeSpec as peer, top-level authorities. Neither source may overwrite the other; semantic differences stop release.
+Only client-safe contracts belong here. `RequestMeta`, `PageQuery`, and `ProblemDetails` are independently authored in JSON Schema and TypeSpec as peer, top-level authorities. Neither source may overwrite the other; semantic differences stop release. `python3 scripts/check-typespec-json-schema.py` compares model closure, fields, optionality, primitive kinds, defaults, and numeric/string bounds before a change can merge.
 
 `opto-sync-lib-core` implements these contracts natively and owns separate server-only definitions. `TrustedActor`, `ServerRequestContext`, and `InternalCommand` must never appear here or in `opto-sync-clients` artifacts.
 
