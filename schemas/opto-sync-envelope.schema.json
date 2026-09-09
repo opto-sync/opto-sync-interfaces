@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://opto-sync.dev/schema/opto-sync-envelope.schema.json",
   "title": "opto-sync ingest envelope",
-  "description": "A JSON file/blob that can be ingested into opto-sync and synchronized to every store (IndexedDB, SQLite, Postgres, Supabase). One envelope carries one or more records; each record's payload must carry the timestamp fields that drive CRDT resolution. This document is the single cross-language source of truth: every TypeScript, Rust, Dart, Gleam, Go, and Java validator must accept/reject exactly the fixture corpus in fixtures/.",
+  "description": "A JSON file/blob that can be ingested into opto-sync and synchronized to every store (IndexedDB, SQLite, Postgres, Supabase). One envelope carries one or more records; each record's payload must carry the timestamp fields that drive CRDT resolution. This document is the independently authored JSON Schema Draft 2020-12 peer authority for this wire shape. Its independently authored TypeSpec peer has equal authority; TypeSpec-emitted JSON Schema is comparison evidence only. TJSV admission and the shared fixture/runtime evidence require TypeScript, Rust, Dart, Gleam, Go, Java, and other validators to converge rather than giving either authored authority precedence.",
   "type": "object",
   "required": ["formatVersion", "records"],
   "additionalProperties": false,
