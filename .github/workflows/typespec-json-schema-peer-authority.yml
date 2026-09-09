@@ -25,7 +25,7 @@ concurrency:
 
 jobs:
   admission:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
       - name: Check out exact head
@@ -60,7 +60,11 @@ jobs:
           assert.equal(manifest.validator.repository, "ORESoftware/typespec-json-schema-validator");
           assert.equal(manifest.validator.actionCommit, "2281843126ab644607b11cf8281d84f382d68dfc");
           assert.equal(manifest.validator.contractIrSchema, "ores.typespec-json-schema-validator.contract-ir/v1");
+          assert.equal(manifest.validator.consumerVerificationSchema, "ores.typespec-json-schema-validator.consumer-verification-receipt/v1");
+          assert.equal(manifest.validator.consumerAdmissionNegativeCases, 19);
           assert.equal(manifest.authorityModel.precedence, "none");
+          assert.equal(manifest.admission.requireExactSourceFileClosure, true);
+          assert.equal(manifest.admission.requireDenseCompleteConsumerScope, true);
           assert.equal(manifest.admission.allowFallbackAuthority, false);
           NODE
       - name: Compare peer authorities and emit fresh Contract IR
