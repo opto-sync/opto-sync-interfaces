@@ -5,7 +5,9 @@
     "typespec": [
       "OptoSync.Validation.PublicValidationContract"
     ],
-    "generated": [],
+    "generated": [
+      "PublicValidationContract"
+    ],
     "authored": []
   }
 }
