@@ -97,6 +97,14 @@ model OptoSyncClientConfig {
   @minLength(1)
   @maxLength(64)
   auth_token_binding?: string;
+
+  @minLength(1)
+  @maxLength(64)
+  local_store_binding?: string;
+
+  @minLength(1)
+  @maxLength(64)
+  background_sync_binding?: string;
 }
 
 @id("OptoSyncServerConfig")
@@ -114,6 +122,18 @@ model OptoSyncServerConfig {
   @minLength(1)
   @maxLength(64)
   nats_url_binding?: string;
+
+  @minLength(1)
+  @maxLength(64)
+  redis_url_binding?: string;
+
+  @minLength(1)
+  @maxLength(64)
+  poll_interval_ms_binding?: string;
+
+  @minLength(1)
+  @maxLength(64)
+  pubsub_channel_binding?: string;
 }
 
 @id("OptoSyncConfig")
