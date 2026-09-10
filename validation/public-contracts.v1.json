@@ -45,9 +45,9 @@
     },
     "PublicValidationContract": {
       "oneOf": [
-        {"$ref": "#/$defs/RequestMeta"},
-        {"$ref": "#/$defs/PageQuery"},
-        {"$ref": "#/$defs/ProblemDetails"}
+        {"$ref": "https://github.com/opto-sync/opto-sync-interfaces/validation/RequestMeta.json"},
+        {"$ref": "https://github.com/opto-sync/opto-sync-interfaces/validation/PageQuery.json"},
+        {"$ref": "https://github.com/opto-sync/opto-sync-interfaces/validation/ProblemDetails.json"}
       ]
     }
   },
