@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Compare the public TypeSpec and JSON Schema authorities semantically.
 
-The two documents intentionally remain independently reviewable.  This gate
+The two documents intentionally remain independently reviewable. This gate
 normalizes their model names, field types, optionality, closure, and bounds so
 one source cannot silently drift from the other without failing CI.
 """
@@ -23,9 +23,18 @@ FIELD_RE = re.compile(
     r"(?P<type>[A-Za-z][A-Za-z0-9_]*)"
     r"(?:\s*=\s*(?P<default>[^;]+))?\s*;"
 )
+
+
 def _constraint(decorators: str, name: str) -> int | None:
     match = re.search(rf"@{name}\((?P<value>-?[0-9]+)\)", decorators)
     return int(match.group("value")) if match else None
+
+
+def _is_false_schema(value: object) -> bool:
+    """Return True for the two Draft 2020-12 spellings of an always-false schema."""
+    if value is False:
+        return True
+    return value == {"not": {}}
 
 
 def parse_typespec(source: str) -> dict[str, dict]:
@@ -78,8 +87,8 @@ def parse_schema(document: dict) -> dict[str, dict]:
             if "default" in field:
                 fields[field_name]["default"] = field["default"]
         models[name] = {
-            "closed": definition.get("additionalProperties") is False
-            or definition.get("unevaluatedProperties") == {"not": {}},
+            "closed": _is_false_schema(definition.get("additionalProperties"))
+            or _is_false_schema(definition.get("unevaluatedProperties")),
             "fields": fields,
         }
     return models
