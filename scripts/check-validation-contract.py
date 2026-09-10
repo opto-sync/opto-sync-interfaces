@@ -8,7 +8,9 @@ ROOT = Path(__file__).resolve().parents[1]
 PUBLIC = ROOT / "validation" / "public-contracts.v1.json"
 TYPESPEC = ROOT / "validation" / "typespec" / "validation.tsp"
 BINDINGS = ROOT / "validation" / "route-bindings.v1.json"
-PUBLIC_NAMES = {"RequestMeta", "PageQuery", "ProblemDetails"}
+PUBLIC_MODELS = {"RequestMeta", "PageQuery", "ProblemDetails"}
+PUBLIC_AGGREGATES = {"PublicValidationContract"}
+PUBLIC_NAMES = PUBLIC_MODELS | PUBLIC_AGGREGATES
 PRIVATE_NAMES = {"TrustedActor", "ServerRequestContext", "InternalCommand"}
 
 schema = json.loads(PUBLIC.read_text())
@@ -19,8 +21,10 @@ assert schema["visibility"] == "public"
 assert set(schema["$defs"]) == PUBLIC_NAMES
 assert bindings["contractVersion"] == schema["contractVersion"]
 assert bindings["routeAuthority"] == schema["routeAuthority"]
-for name in PUBLIC_NAMES:
+for name in PUBLIC_MODELS:
     assert f"model {name}" in typespec, f"missing TypeSpec peer model: {name}"
+for name in PUBLIC_AGGREGATES:
+    assert f"union {name}" in typespec, f"missing TypeSpec peer union: {name}"
 for name in PRIVATE_NAMES:
     assert name not in json.dumps(schema), f"private model leaked: {name}"
     assert name not in typespec, f"private model leaked: {name}"
@@ -28,5 +32,5 @@ for binding in bindings["bindings"]:
     assert binding["operationId"].strip()
     for field in ("requestSchema", "responseSchema", "errorSchema"):
         if field in binding:
-            assert binding[field] in PUBLIC_NAMES
+            assert binding[field] in PUBLIC_MODELS
 print("public validation authorities and route bindings are coherent")
