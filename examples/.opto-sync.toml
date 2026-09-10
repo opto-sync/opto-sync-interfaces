@@ -1,0 +1,111 @@
+version = 1
+mode = "hybrid"
+strict = true
+
+[flags2env]
+contract = ".cli-flags.toml"
+require_audit = true
+precedence = "argv-over-env"
+
+[[env]]
+name = "api_base_url"
+key = "OPTO_SYNC_API_BASE_URL"
+kind = "url"
+required = false
+secret = false
+default = "http://127.0.0.1:8080"
+
+[[env]]
+name = "local_store"
+key = "OPTO_SYNC_LOCAL_STORE"
+kind = "string"
+required = false
+secret = false
+default = "sqlite"
+
+[[env]]
+name = "auth_token"
+key = "OPTO_SYNC_AUTH_TOKEN"
+kind = "string"
+required = false
+secret = true
+
+[[env]]
+name = "background_sync"
+key = "OPTO_SYNC_BACKGROUND"
+kind = "bool"
+required = false
+secret = false
+default = "true"
+
+[[env]]
+name = "sync_interval_ms"
+key = "OPTO_SYNC_INTERVAL_MS"
+kind = "integer"
+required = false
+secret = false
+default = "30000"
+
+[[env]]
+name = "database_url"
+key = "DATABASE_URL"
+kind = "url"
+required = false
+secret = true
+
+[[env]]
+name = "redis_url"
+key = "REDIS_URL"
+kind = "url"
+required = false
+secret = true
+
+[[env]]
+name = "poll_interval_ms"
+key = "OPTO_SYNC_REDIS_POLL_MS"
+kind = "integer"
+required = false
+secret = false
+default = "180000"
+
+[[env]]
+name = "pubsub_channel"
+key = "OPTO_SYNC_PUBSUB_CHANNEL"
+kind = "string"
+required = false
+secret = false
+default = "opto-sync:invalidate"
+
+[[env]]
+name = "batch_size"
+key = "OPTO_SYNC_BATCH_SIZE"
+kind = "integer"
+required = false
+secret = false
+default = "500"
+
+[[env]]
+name = "conflict_policy"
+key = "OPTO_SYNC_CONFLICT_POLICY"
+kind = "string"
+required = false
+secret = false
+default = "merge"
+
+[client]
+enabled = true
+api_base_url_binding = "api_base_url"
+local_store_binding = "local_store"
+auth_token_binding = "auth_token"
+background_sync_binding = "background_sync"
+sync_interval_ms_binding = "sync_interval_ms"
+conflict_policy_binding = "conflict_policy"
+
+[server]
+enabled = true
+database_url_binding = "database_url"
+redis_url_binding = "redis_url"
+poll_interval_ms_binding = "poll_interval_ms"
+pubsub_channel_binding = "pubsub_channel"
+batch_size_binding = "batch_size"
+conflict_policy_binding = "conflict_policy"
