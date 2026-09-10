@@ -2,9 +2,7 @@
   "schema": "ores.typespec-json-schema-validator.mapping/v1",
   "declarations": [],
   "ignore": {
-    "typespec": [
-      "OptoSync.Validation.PublicValidationContract"
-    ],
+    "typespec": [],
     "generated": [],
     "authored": []
   }
