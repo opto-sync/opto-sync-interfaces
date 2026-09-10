@@ -13,6 +13,7 @@
   ],
   "$defs": {
     "RequestMeta": {
+      "$id": "https://github.com/opto-sync/opto-sync-interfaces/validation/RequestMeta.json",
       "type": "object",
       "unevaluatedProperties": false,
       "required": ["requestId", "traceId"],
@@ -23,6 +24,7 @@
       }
     },
     "PageQuery": {
+      "$id": "https://github.com/opto-sync/opto-sync-interfaces/validation/PageQuery.json",
       "type": "object",
       "unevaluatedProperties": false,
       "required": ["limit"],
@@ -32,6 +34,7 @@
       }
     },
     "ProblemDetails": {
+      "$id": "https://github.com/opto-sync/opto-sync-interfaces/validation/ProblemDetails.json",
       "type": "object",
       "unevaluatedProperties": false,
       "required": ["type", "title", "status", "requestId"],
