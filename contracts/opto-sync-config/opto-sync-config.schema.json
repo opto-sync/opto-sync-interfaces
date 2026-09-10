@@ -75,7 +75,9 @@
         "enabled": { "type": "boolean" },
         "api_base_url_binding": { "type": "string", "minLength": 1, "maxLength": 64 },
         "device_id_binding": { "type": "string", "minLength": 1, "maxLength": 64 },
-        "auth_token_binding": { "type": "string", "minLength": 1, "maxLength": 64 }
+        "auth_token_binding": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "local_store_binding": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "background_sync_binding": { "type": "string", "minLength": 1, "maxLength": 64 }
       },
       "required": ["enabled"],
       "unevaluatedProperties": false
@@ -88,7 +90,10 @@
         "enabled": { "type": "boolean" },
         "bind_addr_binding": { "type": "string", "minLength": 1, "maxLength": 64 },
         "database_url_binding": { "type": "string", "minLength": 1, "maxLength": 64 },
-        "nats_url_binding": { "type": "string", "minLength": 1, "maxLength": 64 }
+        "nats_url_binding": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "redis_url_binding": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "poll_interval_ms_binding": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "pubsub_channel_binding": { "type": "string", "minLength": 1, "maxLength": 64 }
       },
       "required": ["enabled"],
       "unevaluatedProperties": false
