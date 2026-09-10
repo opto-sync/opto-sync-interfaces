@@ -24,7 +24,8 @@ jobs:
         with:
           persist-credentials: false
       - name: Parse example TOML
-        run: python3 - <<'PY'
+        run: |
+          python3 - <<'PY'
           import pathlib, tomllib
           doc = tomllib.loads(pathlib.Path('examples/.opto-sync.toml').read_text())
           assert doc['version'] == 1 and doc['strict'] is True
