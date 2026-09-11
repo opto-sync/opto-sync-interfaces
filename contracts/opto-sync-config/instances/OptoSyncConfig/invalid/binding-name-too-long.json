@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "mode": "server",
+  "strict": true,
+  "flags2env": {
+    "contract": ".cli-flags.toml",
+    "require_audit": true,
+    "precedence": "argv-over-env"
+  },
+  "sync": {
+    "push_interval_ms": 1000,
+    "pull_interval_ms": 1000,
+    "max_batch_size": 32,
+    "conflict_policy": "server-wins"
+  },
+  "env": [
+    {
+      "name": "a1234567890123456789012345678901234567890123456789012345678901234",
+      "key": "OPTO_SYNC_BIND",
+      "kind": "string",
+      "required": false,
+      "secret": false
+    }
+  ],
+  "server": {
+    "enabled": true
+  }
+}
