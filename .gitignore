@@ -1,0 +1,12 @@
+/target/
+__pycache__/
+*.class
+*.jar
+*.pyc
+.DS_Store
+/node_modules/
+/.tmp/
+
+# Local temporary directories and Git worktrees (DEN-3956).
+tmp/
+temp/

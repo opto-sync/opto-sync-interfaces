@@ -1,0 +1,51 @@
+name: interfaces
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: opto-sync-interfaces-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  contracts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@2eae45db285e407f22119950686d47e1101e071b
+        with:
+          toolchain: "1.88.0"
+          components: rustfmt, clippy
+      - name: Verify provenance and type-only language matrix
+        run: python3 scripts/verify_contracts.py
+      - run: cargo fmt --all -- --check
+      - run: cargo test --all-targets --locked
+      - run: cargo clippy --all-targets --locked -- -D warnings
+      - name: Compile C-facing declarations
+        run: >-
+          clang -std=c17 -Wall -Wextra -Werror -fsyntax-only -x c
+          generated/c/include/opto_sync_interfaces.h
+      - name: Compile Java-facing declarations
+        run: |
+          mkdir -p "$RUNNER_TEMP/opto-sync-interfaces-java"
+          javac -Xlint:all -d "$RUNNER_TEMP/opto-sync-interfaces-java" \
+            generated/java/src/main/java/dev/optosync/interfaces/Contracts.java
+      - name: Reject runtime authority and conflict markers
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git grep -nE '^(<<<<<<<|=======|>>>>>>>)'; then
+            exit 1
+          fi
+          if git grep -nE 'Database::connect|TcpStream|reqwest|async_nats|merge_json|tokio::spawn' -- src; then
+            exit 1
+          fi

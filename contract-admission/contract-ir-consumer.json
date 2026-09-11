@@ -1,0 +1,37 @@
+{
+  "schema": "ores.contract-ir-consumer/v1",
+  "linearIssue": "DEN-3498",
+  "architectureIssue": "ORESoftware/typespec-json-schema-validator#20",
+  "repository": "opto-sync/opto-sync-interfaces",
+  "repositoryRole": "interfaces",
+  "canonicalAuthorityRepository": "opto-sync/opto-sync-interfaces",
+  "evidenceScope": "repository-local-canary-and-public-contracts",
+  "validator": {
+    "repository": "ORESoftware/typespec-json-schema-validator",
+    "actionCommit": "4740f1367a7906813dcd420a77d0c9ede26943fb",
+    "contractIrSchema": "ores.typespec-json-schema-validator.contract-ir/v1",
+    "consumerVerificationSchema": "ores.typespec-json-schema-validator.consumer-verification-receipt/v1",
+    "consumerAdmissionNegativeCases": 19
+  },
+  "authorityModel": {
+    "typespec": "independently-authored-peer-authority",
+    "jsonSchema": "independently-authored-peer-authority",
+    "generatedJsonSchema": "comparison-evidence-only",
+    "precedence": "none"
+  },
+  "admission": {
+    "requirePassedReceipt": true,
+    "requireAdmissibleContractIr": true,
+    "requireZeroUnexplainedFindings": true,
+    "requireExactSourceFileClosure": true,
+    "requireDenseCompleteConsumerScope": true,
+    "rejectEditableAuthority": true,
+    "allowFallbackAuthority": false
+  },
+  "downstreamResponsibilities": [
+    "own-peer-authorities",
+    "publish-digest-bound-contract-ir-evidence",
+    "block-sync-projection-on-stale-evidence",
+    "reverify-current-inputs-before-runtime-or-projection-promotion"
+  ]
+}

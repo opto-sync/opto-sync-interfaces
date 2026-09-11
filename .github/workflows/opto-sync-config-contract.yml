@@ -1,0 +1,74 @@
+name: opto-sync-config-contract
+
+on:
+  pull_request:
+    paths:
+      - "contracts/opto-sync-config/**"
+      - "examples/.opto-sync.toml"
+      - "docs/opto-sync-config.md"
+      - ".github/workflows/opto-sync-config-contract.yml"
+  push:
+    branches: [main]
+    paths:
+      - "contracts/opto-sync-config/**"
+      - "examples/.opto-sync.toml"
+      - "docs/opto-sync-config.md"
+      - ".github/workflows/opto-sync-config-contract.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  parity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Parse and validate example TOML invariants
+        run: |
+          python3 - <<'PY'
+          import pathlib
+          import tomllib
+
+          doc = tomllib.loads(pathlib.Path('examples/.opto-sync.toml').read_text())
+          assert doc['version'] == 1
+          assert doc['strict'] is True
+          assert doc['flags2env']['contract'] == '.cli-flags.toml'
+          assert doc['flags2env']['require_audit'] is True
+          assert doc['flags2env']['precedence'] == 'argv-over-env'
+
+          sync = doc['sync']
+          assert 100 <= sync['push_interval_ms'] <= 3_600_000
+          assert 100 <= sync['pull_interval_ms'] <= 3_600_000
+          assert 1 <= sync['max_batch_size'] <= 10_000
+          assert sync['conflict_policy'] in {
+              'server-wins', 'client-wins', 'last-write-wins', 'manual'
+          }
+
+          env = doc['env']
+          names = [entry['name'] for entry in env]
+          keys = [entry['key'] for entry in env]
+          assert len(names) == len(set(names)), 'duplicate env binding name'
+          assert len(keys) == len(set(keys)), 'duplicate env key'
+          by_name = {entry['name']: entry for entry in env}
+
+          for binding in env:
+              if binding.get('secret'):
+                  assert 'default' not in binding, f"secret default: {binding['name']}"
+
+          for section_name in ('client', 'server'):
+              section = doc.get(section_name, {})
+              for field, binding_name in section.items():
+                  if field.endswith('_binding'):
+                      assert binding_name in by_name, (
+                          f"unresolved {section_name}.{field}: {binding_name}"
+                      )
+          PY
+      - name: Admit independent TypeSpec and JSON Schema authorities
+        uses: ORESoftware/typespec-json-schema-validator@4a5d049218adc2740d4cf78f612caf7f38f6f64c
+        with:
+          typespec: contracts/opto-sync-config/opto-sync-config.tsp
+          schema: contracts/opto-sync-config/opto-sync-config.schema.json
+          report: .typespec-json-schema-validator/opto-sync-config-report.json
+          output_dir: .typespec-json-schema-validator/opto-sync-config-generated

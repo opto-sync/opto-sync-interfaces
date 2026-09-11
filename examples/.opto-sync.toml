@@ -1,0 +1,118 @@
+version = 1
+mode = "hybrid"
+strict = true
+
+[flags2env]
+contract = ".cli-flags.toml"
+require_audit = true
+precedence = "argv-over-env"
+
+[sync]
+push_interval_ms = 3000
+pull_interval_ms = 3000
+max_batch_size = 256
+conflict_policy = "last-write-wins"
+
+[[env]]
+name = "api_base_url"
+key = "OPTO_SYNC_API_BASE_URL"
+kind = "url"
+required = false
+secret = false
+default = "http://127.0.0.1:8080"
+
+[[env]]
+name = "device_id"
+key = "OPTO_SYNC_DEVICE_ID"
+kind = "string"
+required = false
+secret = false
+
+[[env]]
+name = "auth_token"
+key = "OPTO_SYNC_AUTH_TOKEN"
+kind = "string"
+required = false
+secret = true
+description = "Client auth token; environment or approved secret store only."
+
+[[env]]
+name = "local_store"
+key = "OPTO_SYNC_LOCAL_STORE"
+kind = "string"
+required = false
+secret = false
+default = "sqlite"
+
+[[env]]
+name = "background_sync"
+key = "OPTO_SYNC_BACKGROUND"
+kind = "bool"
+required = false
+secret = false
+default = "true"
+
+[[env]]
+name = "bind_addr"
+key = "OPTO_SYNC_API_BIND"
+kind = "string"
+required = false
+secret = false
+default = "127.0.0.1:8080"
+
+[[env]]
+name = "database_url"
+key = "DATABASE_URL"
+kind = "url"
+required = true
+secret = true
+description = "Server PostgreSQL/CockroachDB URL; never a CLI flag or plaintext default."
+
+[[env]]
+name = "nats_url"
+key = "OPTO_SYNC_NATS_URL"
+kind = "url"
+required = false
+secret = true
+description = "Optional NATS transport URL; may contain credentials."
+
+[[env]]
+name = "redis_url"
+key = "REDIS_URL"
+kind = "url"
+required = false
+secret = true
+description = "Optional server-side Redis endpoint; environment or approved secret store only."
+
+[[env]]
+name = "redis_poll_interval_ms"
+key = "OPTO_SYNC_REDIS_POLL_MS"
+kind = "integer"
+required = false
+secret = false
+default = "180000"
+
+[[env]]
+name = "pubsub_channel"
+key = "OPTO_SYNC_PUBSUB_CHANNEL"
+kind = "string"
+required = false
+secret = false
+default = "opto-sync:invalidate"
+
+[client]
+enabled = true
+api_base_url_binding = "api_base_url"
+device_id_binding = "device_id"
+auth_token_binding = "auth_token"
+local_store_binding = "local_store"
+background_sync_binding = "background_sync"
+
+[server]
+enabled = true
+bind_addr_binding = "bind_addr"
+database_url_binding = "database_url"
+nats_url_binding = "nats_url"
+redis_url_binding = "redis_url"
+poll_interval_ms_binding = "redis_poll_interval_ms"
+pubsub_channel_binding = "pubsub_channel"
