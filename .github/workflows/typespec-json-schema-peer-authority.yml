@@ -30,11 +30,15 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  TSJSV_COMMIT: 4740f1367a7906813dcd420a77d0c9ede26943fb
+  TSJSV_COMMIT: 5b04b08512f8a03a376dcb96818969e2d83c2d84
 
 jobs:
   admission:
-    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, macos-15, windows-2025]
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 20
     steps:
       - name: Check out exact head
@@ -77,7 +81,7 @@ jobs:
           assert.equal(manifest.admission.allowFallbackAuthority, false);
           NODE
       - name: Compare canary peer authorities and emit fresh Contract IR
-        uses: ORESoftware/typespec-json-schema-validator@4740f1367a7906813dcd420a77d0c9ede26943fb
+        uses: ORESoftware/typespec-json-schema-validator@5b04b08512f8a03a376dcb96818969e2d83c2d84
         with:
           typespec: schema-authority-canary/main.tsp
           schema: schema-authority-canary/authored.schema.json
@@ -87,7 +91,7 @@ jobs:
           output_dir: .typespec-json-schema-validator/canary/generated
           max_probes: "64"
       - name: Require positive canary admission and nineteen canonical refusals
-        uses: ORESoftware/typespec-json-schema-validator/actions/test-consumer-admission@4740f1367a7906813dcd420a77d0c9ede26943fb
+        uses: ORESoftware/typespec-json-schema-validator/actions/test-consumer-admission@5b04b08512f8a03a376dcb96818969e2d83c2d84
         with:
           contract_ir: .typespec-json-schema-validator/canary/contract-ir.json
           report: .typespec-json-schema-validator/canary/report.json
@@ -96,8 +100,23 @@ jobs:
           generated_schema: .typespec-json-schema-validator/canary/generated/typespec.generated.schema.json
           expected_declarations: '["OreSchemaAuthority.AuthorityKind","OreSchemaAuthority.PeerAuthorityRegistration"]'
           verification: .typespec-json-schema-validator/canary/consumer-verification.json
+      - name: Assert canary consumer receipt
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import assert from "node:assert/strict";
+          import { readFileSync } from "node:fs";
+          const receipt = JSON.parse(readFileSync(".typespec-json-schema-validator/canary/consumer-verification.json", "utf8"));
+          assert.equal(receipt.schema, "ores.typespec-json-schema-validator.consumer-verification-receipt/v1");
+          assert.equal(receipt.status, "passed");
+          assert.equal(receipt.admissible, true);
+          assert.equal(receipt.failureCode, null);
+          assert.equal(receipt.suppliedIrId, receipt.computedIrId);
+          assert.equal(receipt.suppliedIrId, receipt.expectedIrId);
+          NODE
       - name: Compare production public peer authorities and emit Contract IR
-        uses: ORESoftware/typespec-json-schema-validator@4740f1367a7906813dcd420a77d0c9ede26943fb
+        uses: ORESoftware/typespec-json-schema-validator@5b04b08512f8a03a376dcb96818969e2d83c2d84
         with:
           typespec: validation/typespec/validation.tsp
           schema: validation/public-contracts.v1.json
@@ -129,7 +148,7 @@ jobs:
         if: ${{ always() }}
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: contract-ir-admission-${{ github.event.repository.name }}-${{ github.run_id }}
+          name: contract-ir-admission-${{ matrix.os }}-${{ github.event.repository.name }}-${{ github.run_id }}
           path: .typespec-json-schema-validator/
           include-hidden-files: true
           if-no-files-found: error
