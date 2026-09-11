@@ -66,7 +66,7 @@ jobs:
                       )
           PY
       - name: Admit independent TypeSpec and JSON Schema authorities and instance corpus
-        uses: ORESoftware/typespec-json-schema-validator@4a5d049218adc2740d4cf78f612caf7f38f6f64c
+        uses: ORESoftware/typespec-json-schema-validator@7f32ec87bff6aac95c7fe23b9f7c592eb701568d
         with:
           typespec: contracts/opto-sync-config/opto-sync-config.tsp
           schema: contracts/opto-sync-config/opto-sync-config.schema.json
