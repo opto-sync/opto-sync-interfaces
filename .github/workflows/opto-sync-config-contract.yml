@@ -65,10 +65,11 @@ jobs:
                           f"unresolved {section_name}.{field}: {binding_name}"
                       )
           PY
-      - name: Admit independent TypeSpec and JSON Schema authorities
+      - name: Admit independent TypeSpec and JSON Schema authorities and instance corpus
         uses: ORESoftware/typespec-json-schema-validator@4a5d049218adc2740d4cf78f612caf7f38f6f64c
         with:
           typespec: contracts/opto-sync-config/opto-sync-config.tsp
           schema: contracts/opto-sync-config/opto-sync-config.schema.json
+          instances: contracts/opto-sync-config/instances
           report: .typespec-json-schema-validator/opto-sync-config-report.json
           output_dir: .typespec-json-schema-validator/opto-sync-config-generated
