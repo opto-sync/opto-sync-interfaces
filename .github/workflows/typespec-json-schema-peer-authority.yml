@@ -30,7 +30,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  TSJSV_COMMIT: 5b04b08512f8a03a376dcb96818969e2d83c2d84
+  TSJSV_COMMIT: eb31dec0ed1ca54259adbd3396bd7e4de20e8ca6
 
 jobs:
   admission:
@@ -81,7 +81,7 @@ jobs:
           assert.equal(manifest.admission.allowFallbackAuthority, false);
           NODE
       - name: Compare canary peer authorities and emit fresh Contract IR
-        uses: ORESoftware/typespec-json-schema-validator@5b04b08512f8a03a376dcb96818969e2d83c2d84
+        uses: ORESoftware/typespec-json-schema-validator@eb31dec0ed1ca54259adbd3396bd7e4de20e8ca6
         with:
           typespec: schema-authority-canary/main.tsp
           schema: schema-authority-canary/authored.schema.json
@@ -91,7 +91,7 @@ jobs:
           output_dir: .typespec-json-schema-validator/canary/generated
           max_probes: "64"
       - name: Require positive canary admission and nineteen canonical refusals
-        uses: ORESoftware/typespec-json-schema-validator/actions/test-consumer-admission@5b04b08512f8a03a376dcb96818969e2d83c2d84
+        uses: ORESoftware/typespec-json-schema-validator/actions/test-consumer-admission@eb31dec0ed1ca54259adbd3396bd7e4de20e8ca6
         with:
           contract_ir: .typespec-json-schema-validator/canary/contract-ir.json
           report: .typespec-json-schema-validator/canary/report.json
@@ -116,7 +116,7 @@ jobs:
           assert.equal(receipt.suppliedIrId, receipt.expectedIrId);
           NODE
       - name: Compare production public peer authorities and emit Contract IR
-        uses: ORESoftware/typespec-json-schema-validator@5b04b08512f8a03a376dcb96818969e2d83c2d84
+        uses: ORESoftware/typespec-json-schema-validator@eb31dec0ed1ca54259adbd3396bd7e4de20e8ca6
         with:
           typespec: validation/typespec/validation.tsp
           schema: validation/public-contracts.v1.json
