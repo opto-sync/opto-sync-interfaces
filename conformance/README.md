@@ -1,26 +1,18 @@
-# Conformance
+# Conformance declarations
 
-Conformance turns contract claims into executable, falsifiable checks. A passing declaration-only diff is not enough: each check must exercise a known-good model and at least one intentionally broken control.
+This repository is declaration-only. `conformance/` records falsifiable properties and required controls that implementation/E2E repositories must execute; validators, merge engines, transports, persistence, schedulers, and telemetry code do not belong here.
 
-## Current bounded model
+## Mutation/checkpoint requirements
 
-`model-checker` exhaustively explores the bounded mutation/checkpoint state machine and proves within that bound that:
+`mutation-checkpoint.properties.json` declares the bounded protocol properties that downstream executable lanes must refine against real implementation commits:
 
-- applying the same `(client_id, mutation_id)` twice is idempotent;
-- the applied count equals the number of unique applied mutation identities;
+- duplicate `(client_id, mutation_id)` delivery is idempotent;
+- applied-count state reflects unique applied mutation identities;
 - checkpoints never regress;
-- checkpoints never advance beyond durably applied mutations.
+- a checkpoint cannot acknowledge state beyond durably applied mutations.
 
-The executable also runs two negative controls: duplicate delivery incorrectly increments the applied count, and checkpoint advancement is allowed beyond applied state. Both must be rejected or the checker itself fails.
+A qualifying executable checker must also prove it can fail by rejecting intentionally broken controls for duplicate-counting and checkpoint leap-ahead.
 
-Run it with:
+These declarations do **not** establish CRDT/OT semantics, causal consistency, production durability, or cross-runtime convergence. Such claims require implementation-linked execution in `opto-sync-e2e` and/or the owning runtime repository.
 
-```sh
-cargo run --locked --manifest-path conformance/model-checker/Cargo.toml
-```
-
-This model does **not** by itself prove distributed causal consistency, CRDT/OT semantics, production storage durability, or cross-runtime convergence. Those claims require their own state machines and executable evidence.
-
-## Evidence rules
-
-Only an exact-head, actually executed, stepful green run is conformance evidence. Queued, skipped, zero-step, stale-head, billing/admission-blocked, missing-run, and historical-only results are not green evidence.
+Only exact-head, actually executed, stepful green downstream evidence may satisfy these declarations. Queued, skipped, zero-step, stale-head, billing/admission-blocked, missing-run, and historical-only results are not green evidence.

@@ -1,0 +1,24 @@
+{
+  "schema": "opto-sync.conformance-properties.v1",
+  "id": "mutation-checkpoint",
+  "properties": [
+    {
+      "id": "duplicate-mutation-idempotent",
+      "statement": "Applying the same (client_id, mutation_id) more than once must not increase durable application count after the first application."
+    },
+    {
+      "id": "unique-application-accounting",
+      "statement": "Applied-count state equals the number of unique durably applied mutation identities within the qualified trace."
+    },
+    {
+      "id": "checkpoint-monotonic",
+      "statement": "A durable checkpoint must never regress."
+    },
+    {
+      "id": "checkpoint-bounded-by-durable-application",
+      "statement": "A checkpoint must not acknowledge mutations or state that have not been durably applied."
+    }
+  ],
+  "required_negative_controls": ["duplicate-counts-twice", "checkpoint-leaps-ahead"],
+  "excluded_claims": ["crdt", "ot", "causal-consistency", "total-order", "production-durability"]
+}
