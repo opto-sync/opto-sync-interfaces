@@ -31,7 +31,7 @@ jobs:
         with:
           node-version: 22.16.0
       - name: Require fresh compiler-backed peer parity
-        uses: ORESoftware/typespec-json-schema-validator@7f32ec87bff6aac95c7fe23b9f7c592eb701568d
+        uses: ORESoftware/typespec-json-schema-validator@e29a91d7ef74e3b0613ea79e988bec4c467535d2
         with:
           typespec: schema-authority-canary/main.tsp
           schema: schema-authority-canary/authored.schema.json
@@ -40,7 +40,7 @@ jobs:
           output_dir: .typespec-json-schema-validator/regressions/generated
           max_probes: "64"
       - name: Require positive admission and nineteen canonical refusals
-        uses: ORESoftware/typespec-json-schema-validator/actions/test-consumer-admission@7f32ec87bff6aac95c7fe23b9f7c592eb701568d
+        uses: ORESoftware/typespec-json-schema-validator/actions/test-consumer-admission@e29a91d7ef74e3b0613ea79e988bec4c467535d2
         with:
           contract_ir: .typespec-json-schema-validator/regressions/contract-ir.json
           report: .typespec-json-schema-validator/regressions/report.json
@@ -81,4 +81,5 @@ jobs:
           retention-days: 14
 # DEN-3828 / upstream issue #20. Coverage is the existing two-declaration canary,
 # not production sync contracts, language conformance, SQL, or ORM behavior.
+# TJSV pin updated after GHSA-2q42-4q24-7rgv remediation in merged upstream #204.
 # Existing native gates and consumer policy remain unchanged.
