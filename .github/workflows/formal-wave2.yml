@@ -2,17 +2,21 @@ name: Formal wave 2
 on:
   pull_request:
     paths:
+      - 'contracts/**'
       - 'conformance/**'
+      - 'governance/**'
       - '.github/workflows/formal-wave2.yml'
   workflow_dispatch:
 permissions:
   contents: read
 jobs:
   bounded-model-check:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
-          python-version: '3.13'
-      - run: python conformance/mutation_checkpoint_model.py
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@39b0b3842c7e8bbf6904c0bfc3d9006fdd4dc4e0 # 1.88.0
+      - name: Run mutation/checkpoint model and negative controls
+        run: cargo run --locked --manifest-path conformance/model-checker/Cargo.toml

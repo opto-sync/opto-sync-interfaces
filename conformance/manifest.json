@@ -1,0 +1,20 @@
+{
+  "schema": "opto-sync.conformance.v1",
+  "checks": [
+    {
+      "id": "mutation-checkpoint-bounded-model",
+      "kind": "bounded-model-check",
+      "command": "cargo run --locked --manifest-path conformance/model-checker/Cargo.toml",
+      "claims": [
+        "duplicate mutation identity is idempotent",
+        "applied count equals unique mutation identities",
+        "checkpoint is monotonic",
+        "checkpoint does not exceed applied mutation count"
+      ],
+      "negative_controls": [
+        "duplicate-counts-twice",
+        "checkpoint-leaps-ahead"
+      ]
+    }
+  ]
+}
