@@ -1,0 +1,21 @@
+{
+  "schema": "opto-sync.contract-authority.v1",
+  "repository": "opto-sync/opto-sync-interfaces",
+  "role": "peer-authority",
+  "peer_authorities": [
+    {
+      "kind": "typespec",
+      "path": "contracts/opto-sync-config/opto-sync-config.tsp",
+      "authored": true
+    },
+    {
+      "kind": "json-schema",
+      "draft": "2020-12",
+      "path": "contracts/opto-sync-config/opto-sync-config.schema.json",
+      "authored": true
+    }
+  ],
+  "parity_gate": "ORESoftware/typespec-json-schema-validator",
+  "generated_artifacts_are_authority": false,
+  "incompatible_versions_fail_closed": true
+}

@@ -1,0 +1,18 @@
+{
+  "schema": "opto-sync.promotion-policy.v1",
+  "exact_head_required": true,
+  "stepful_execution_required": true,
+  "disallowed_green_evidence": [
+    "queued",
+    "skipped",
+    "zero-step",
+    "stale-head",
+    "billing-blocked",
+    "admission-blocked",
+    "missing-run",
+    "historical-only"
+  ],
+  "compatibility_classification_required": true,
+  "peer_authority_parity_required": true,
+  "negative_control_required_for_model_checks": true
+}

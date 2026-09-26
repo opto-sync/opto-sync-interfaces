@@ -1,0 +1,9 @@
+{
+  "schema": "opto-sync.conformance-declarations.v1",
+  "repository": "opto-sync/opto-sync-interfaces",
+  "role": "declaration-only",
+  "properties": ["conformance/mutation-checkpoint.properties.json"],
+  "execution_repository_candidates": ["opto-sync/opto-sync-e2e", "implementation-owner"],
+  "implementation_commit_required": true,
+  "negative_controls_required": true
+}
