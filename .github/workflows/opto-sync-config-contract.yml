@@ -21,10 +21,19 @@ permissions:
 jobs:
   parity:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
           persist-credentials: false
+      - name: Verify exact source commit under test
+        shell: bash
+        env:
+          EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$EXPECTED_SHA"
       - name: Parse and validate example TOML invariants
         run: |
           python3 - <<'PY'
@@ -66,10 +75,33 @@ jobs:
                       )
           PY
       - name: Admit independent TypeSpec and JSON Schema authorities and instance corpus
-        uses: ORESoftware/typespec-json-schema-validator@7f32ec87bff6aac95c7fe23b9f7c592eb701568d
+        uses: ORESoftware/typespec-json-schema-validator@eb669d2c2c4f0800fac54f9b5a306b550121f1ac
         with:
           typespec: contracts/opto-sync-config/opto-sync-config.tsp
           schema: contracts/opto-sync-config/opto-sync-config.schema.json
           instances: contracts/opto-sync-config/instances
           report: .typespec-json-schema-validator/opto-sync-config-report.json
+          contract_ir: .typespec-json-schema-validator/opto-sync-config-contract-ir.json
           output_dir: .typespec-json-schema-validator/opto-sync-config-generated
+
+      - name: Admit current product Contract IR and prove canonical refusals
+        uses: ORESoftware/typespec-json-schema-validator/actions/test-consumer-admission@eb669d2c2c4f0800fac54f9b5a306b550121f1ac
+        with:
+          contract_ir: .typespec-json-schema-validator/opto-sync-config-contract-ir.json
+          report: .typespec-json-schema-validator/opto-sync-config-report.json
+          typespec: contracts/opto-sync-config/opto-sync-config.tsp
+          schema: contracts/opto-sync-config/opto-sync-config.schema.json
+          generated_schema: .typespec-json-schema-validator/opto-sync-config-generated/typespec.generated.schema.json
+          expected_declarations: '["OptoSync.Config.OptoSyncMode","OptoSync.Config.EnvKind","OptoSync.Config.Flags2EnvPrecedence","OptoSync.Config.ConflictPolicy","OptoSync.Config.Flags2EnvConfig","OptoSync.Config.EnvBinding","OptoSync.Config.SyncPolicy","OptoSync.Config.OptoSyncClientConfig","OptoSync.Config.OptoSyncServerConfig","OptoSync.Config.OptoSyncConfig"]'
+          verification: .typespec-json-schema-validator/opto-sync-config-consumer-verification.json
+      - name: Preserve the independent authored inputs
+        run: git diff --exit-code -- contracts/opto-sync-config/
+      - name: Preserve real admission evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: opto-sync-config-contract-${{ github.event.pull_request.head.sha || github.sha }}
+          path: .typespec-json-schema-validator/
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 30
