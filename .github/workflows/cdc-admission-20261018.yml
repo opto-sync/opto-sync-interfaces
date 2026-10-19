@@ -1,0 +1,24 @@
+name: cdc-admission exact-head conformance
+on:
+  pull_request:
+    paths:
+      - 'contracts/cdc/cdc-admission.test.mjs'
+      - '.github/workflows/cdc-admission-20261018.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  reference-check:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af
+        with:
+          node-version: '22.16.0'
+      - name: Execute checked-out negative regressions
+        run: |
+          set -euo pipefail
+          node --test contracts/cdc/cdc-admission.test.mjs
