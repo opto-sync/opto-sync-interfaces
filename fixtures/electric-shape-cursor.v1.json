@@ -1,0 +1,80 @@
+{
+  "valid": [
+    {
+      "version": 1,
+      "scopeKey": "tenant-hash:shape-hash",
+      "shapeHandle": "a1b2-uuid-opaque",
+      "offset": "123_0"
+    },
+    {
+      "version": 1,
+      "scopeKey": "tenant-hash:shape-hash",
+      "shapeHandle": "a1b2-uuid-opaque",
+      "offset": "18446744073709551615_9"
+    },
+    {
+      "version": 1,
+      "scopeKey": "scope-x",
+      "shapeHandle": "handle-2",
+      "offset": "-1"
+    }
+  ],
+  "invalid": [
+    {
+      "version": 2,
+      "scopeKey": "tenant-hash:shape-hash",
+      "shapeHandle": "a1b2-uuid-opaque",
+      "offset": "123_0"
+    },
+    {
+      "version": 1,
+      "scopeKey": "",
+      "shapeHandle": "a1b2-uuid-opaque",
+      "offset": "123_0"
+    },
+    {
+      "version": 1,
+      "scopeKey": "tenant-hash:shape-hash",
+      "shapeHandle": "",
+      "offset": "123_0"
+    },
+    {
+      "version": 1,
+      "scopeKey": "tenant-hash:shape-hash",
+      "shapeHandle": "a1b2-uuid-opaque",
+      "offset": ""
+    },
+    {
+      "version": 1,
+      "scopeKey": "tenant-hash:shape-hash",
+      "shapeHandle": "a1b2-uuid-opaque",
+      "offset": "123_0",
+      "checkpoint": "17"
+    },
+    {
+      "version": 1,
+      "scopeKey": "tenant-hash:shape-hash",
+      "shapeHandle": "a1b2-uuid-opaque",
+      "offset": "123_0",
+      "mutationId": "2"
+    },
+    {
+      "version": 1,
+      "scopeKey": "tenant-hash:shape-hash",
+      "shapeHandle": "a1b2-uuid-opaque",
+      "offset": 42
+    },
+    {
+      "version": 1,
+      "scopeKey": null,
+      "shapeHandle": "a1b2-uuid-opaque",
+      "offset": "123_0"
+    },
+    {
+      "version": "1",
+      "scopeKey": "tenant-hash:shape-hash",
+      "shapeHandle": "a1b2-uuid-opaque",
+      "offset": "123_0"
+    }
+  ]
+}

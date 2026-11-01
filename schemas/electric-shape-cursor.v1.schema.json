@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://opto-sync.dev/schema/electric-shape-cursor.v1.schema.json",
+  "title": "Opto Sync Electric shape resume cursor v1",
+  "description": "Opaque Electric shape position. This is NOT an Opto Sync protocol checkpoint, mutation acknowledgement, transaction ID, or database revision. A reset invalidates the entire cursor.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "scopeKey",
+    "shapeHandle",
+    "offset"
+  ],
+  "properties": {
+    "version": {
+      "const": 1
+    },
+    "scopeKey": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256,
+      "description": "Application-defined stable, non-secret scope key binding tenant and shape definition. Reject mismatches when restoring."
+    },
+    "shapeHandle": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "offset": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256,
+      "description": "Opaque offset returned by Electric. Never compare numerically or substitute for Opto Sync commit checkpoints."
+    }
+  }
+}
