@@ -40,7 +40,10 @@ fn attolang_candidate_has_falsifiable_negative_controls() {
         "uncommitted-snapshot",
         "ack-before-local-fsync",
     ] {
-        assert!(controls.contains(required), "missing negative control: {required}");
+        assert!(
+            controls.contains(required),
+            "missing negative control: {required}"
+        );
     }
     let excluded = document["excluded_claims"]
         .as_array()
