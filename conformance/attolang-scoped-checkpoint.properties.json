@@ -1,0 +1,42 @@
+{
+  "schema": "opto-sync.conformance-properties.v1",
+  "id": "attolang-scoped-checkpoint",
+  "language": "atto",
+  "source_extension": ".atto",
+  "evidence_class": "declaration-only",
+  "properties": [
+    {
+      "id": "exact-resume",
+      "statement": "An AttoLang guest may resume only its exact committed local checkpoint within the current authenticated scope and generation."
+    },
+    {
+      "id": "monotonic-scoped-change",
+      "statement": "An authenticated delta must chain from the current scoped checkpoint and advance it monotonically; global revision gaps caused by filtering are permitted."
+    },
+    {
+      "id": "generation-fencing",
+      "statement": "A delta or cursor from a previous generation must be denied after an authorized snapshot rotation."
+    },
+    {
+      "id": "no-guest-authentication",
+      "statement": "Guest booleans and decimal identifiers are not authentication or durability capabilities; a trusted adapter must establish both."
+    },
+    {
+      "id": "durable-ack-identity",
+      "statement": "A mutation may retire only after verified scope, client, mutation ID, server-durable outcome, and durably persisted local retirement."
+    }
+  ],
+  "required_negative_controls": [
+    "stale-generation",
+    "cross-scope-replay",
+    "cursor-regression",
+    "uncommitted-snapshot",
+    "ack-before-local-fsync"
+  ],
+  "excluded_claims": [
+    "atto-guest-execution",
+    "remote-generation-fencing",
+    "production-durability",
+    "multi-backend-parity"
+  ]
+}
